@@ -1,3 +1,39 @@
+model_select <- function(cmax,x,eps = 1e-5){
+  # input 
+  # cmax: the up limit of components. 
+  # x : the m6A methylation level data fed into the MBMM.
+  # eps : The criterion of convergence, that is, the increasing degree 
+  # of the log-likelihood of the observed data is no larger than eps, 
+  # then the algorithm ends.
+  
+  # output of MBMM
+  # correct_model: the correct model selected by MBMM
+  # ICL_BIC_OF_EACH_MODEL: the ICL-BIC score related to the models 
+  # output by MBMM performing on data set. These models contain different component,
+  # changing from 2 to cmax.
+  # model_i(i= 2,3,...,cmax): the parameters and clusters related to the models
+  # output by MBMM performing on data set. These models contain different component,
+  # changing from 2 to cmax.
+  
+  
+  criterion <- 0
+  out = list()
+  for (c in 2:cmax) {
+    result_MBMM <- MBMM(x = x,eps = 1e-5, k = c)
+    assign(paste("model", c, sep="_"),result_MBMM)
+    out[[paste("model", c, sep="_")]] <- get(paste("model", c, sep="_"))
+    
+    criterion[c-1] <- result_MBMM$ICL_BIC
+    correct_model <- which.min(criterion) + 1
+    
+  }
+  
+  out[["ICL_BIC_OF_EACH_MODEL"]] <- criterion
+  out[["correct_model"]] <- correct_model
+  
+  return(out)
+}
+
 customKmeans<-function(dataset,k){
   if(is.na(dataset) || is.na(k)){
     stop("You must input valid parameters!!")
@@ -251,25 +287,6 @@ MBMM <- function(x,eps = 1e-5,k){
   out[["yita_k"]] <- update_yita_1
   out[["random_number"]] <-  random_number
   out[["ICL_BIC"]] <- compute_ICL_BIC
-  
-  return(out)
-}
-model_select <- function(cmax,x,eps = 1e-5){
-  
-  criterion <- 0
-  out = list()
-  for (c in 2:cmax) {
-    result_MBMM <- MBMM(x = x,eps = 1e-5, k = c)
-    assign(paste("model", c, sep="_"),result_MBMM)
-    out[[paste("model", c, sep="_")]] <- get(paste("model", c, sep="_"))
-    
-    criterion[c-1] <- result_MBMM$ICL_BIC
-    correct_model <- which.min(criterion) + 1
-   
-  }
-  
-  out[["ICL_BIC_OF_EACH_MODEL"]] <- criterion
-  out[["correct_model"]] <- correct_model
   
   return(out)
 }
