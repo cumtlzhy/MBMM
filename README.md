@@ -1,4 +1,5 @@
 # The MBMM user's guider
+5/18/2020 4:58:54 PM   
 Multivariate Beta Mixture Model-Based Clustering Algorithm
 ## Function description
 MBMM is used to find potential m<sup>6</sup>A co-methylation modules based on MeRIP-Seq data, where sites are hyper-methylated or hypo-methylated simultaneously across the specific conditions.
