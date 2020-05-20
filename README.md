@@ -8,7 +8,7 @@ The data fed into MBMM should be **a numerical matrice (or dataframe), of which 
 ## Usage
 You can run the MBMM based on the simulated data we have supplied, then MBMM will give you the correct model and the related parameters.
 ```
-   Data_lables_sample <- read.csv("dataset.csv", header = TRUE)
+   Data_lables_sample <- read.csv('./dataset.csv', header = TRUE)
    Data <- Data_lables_sample[,1:4]
    model <- model_select(cmax = 6,x = Data,eps = 1e-5)
 ```
